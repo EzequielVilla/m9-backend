@@ -1,1 +1,6 @@
 .vercel
+.next
+node_modules
+anotaciones.md
+.env.local
+.env
