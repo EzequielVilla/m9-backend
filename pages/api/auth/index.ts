@@ -9,14 +9,12 @@ const bodySchema = yup.object().shape({
     email: yup.string().required(),
 }).noUnknown(true).strict();
 
-interface reqData{
-    email:string
-}
+
 
 async function postHandler(req:NextApiRequest, res:NextApiResponse){
     
     
-    const {email} = req.body as reqData
+    const {email} = req.body
     await findOrCreateAuth(email);
     const auth = await sendCode(email)     
     const emailSended = await sendCodeEmail(email,auth.data.code) 

@@ -11,7 +11,7 @@ const querySchema = yup.object().shape({
     q: yup.string().required(),
     offset:yup.string(),
     limit:yup.string()
-});
+}).noUnknown(true).strict();
 
 async function getHandler(req:NextApiRequest, res:NextApiResponse){
     const {limit,offset} = getOffsetAndLimitFromReq(req);

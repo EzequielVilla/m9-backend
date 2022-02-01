@@ -14,9 +14,11 @@ interface upgradeData{
 //for last class interface
 
 interface orderData{
+    additionalInfo?:any,
     userId: string,
     title:string,
     unit_price:number,
-    success:string,
-    notification_url:string
+    status:boolean,
+    productId:string
+    
 }

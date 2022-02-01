@@ -21,20 +21,12 @@ export class Auth{
     }
     //busca en la base un registro y nos genera una instancia de nuestro modelo para que le podamos hacer push
     static async findByEmail(email:string):Promise<Auth>{
-        const cleanEmail = email.trim().toLowerCase();
-        
-        
-        const results = await collection.where("email", "==", cleanEmail).get()
-        
-        
-        
-        
+        const cleanEmail = email.trim().toLowerCase();       
+        const results = await collection.where("email", "==", cleanEmail).get() 
         if(results.docs.length){
             const first = results.docs[0]
             const newAuth = new Auth(first.id)
-            newAuth.data = first.data();
-            
-            
+            newAuth.data = first.data();        
             return newAuth;
         }       
     }

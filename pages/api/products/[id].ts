@@ -7,7 +7,7 @@ import { findResultById } from "controllers/searchs";
 
 const querySchema = yup.object().shape({
     id: yup.string().required(),
-});
+}).noUnknown(true).strict();
 
 
 async function getHandler(req:NextApiRequest, res:NextApiResponse){

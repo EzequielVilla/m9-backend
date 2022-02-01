@@ -8,7 +8,7 @@ import { User } from "models/user";
 
 
 
-export async function getRedirectAndCreateOrder(productId:string, token,data?){
+export async function getRedirectAndCreateOrder(productId:string, token,data?):Promise<string>{
     const user = new User(token.userId)     
     await user.pull()
     const userEmail = user.data.email;
@@ -21,7 +21,7 @@ export async function getRedirectAndCreateOrder(productId:string, token,data?){
     return resPreference.init_point;
 }
 
-export async function getOrderFromDB(orderId:string){
+export async function getOrderFromDB(orderId:string):Promise<orderData>{
     return await Order.getOrderById(orderId);  
     
 }
@@ -30,9 +30,9 @@ export async function getOrderStatus(id:string, topic:string){
     if(topic == "merchant_order") return await getMerchantOrder(id);
 }
 
-export async function checkOrderStatusAndProcess(order){
+export async function checkOrderStatusAndProcess(order):Promise<string>{
     if(order.order_status == "paid"){
-        const orderId = order.external_reference;
+        const orderId:string= order.external_reference;
         const myOrder = new Order(orderId);
         await myOrder.pull();
         myOrder.data.status = true;

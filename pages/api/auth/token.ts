@@ -24,9 +24,7 @@ const bodySchema = yup.object().shape({
 
 async function postHandler(req:NextApiRequest, res:NextApiResponse) {
     const {email,code} = req.body as reqData;
-    const info = await Auth.findByEmail(email);
-    
-    
+    const info = await Auth.findByEmail(email);    
     const data = info.data as dataFromEmail;
     const correctInfo = checkCodeAndExpiration(data.code, code , data.expires)
     if(correctInfo){

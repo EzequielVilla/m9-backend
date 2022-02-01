@@ -34,6 +34,7 @@ export async function sendCode(email:string):Promise<Auth>{
     auth.data.code = code ;
     auth.data.expires = oneDay;
     await auth.push();
+    
     return auth;
 }
 

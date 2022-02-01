@@ -33,12 +33,3 @@ const handler = methods({
     patch,
 })
 export default yupAddressIndexBody(bodySchema, handler)
-// export default authMiddleware(handler)
-
-
-// export default methods({
-    // patch:authMiddleware(yupAddressIndexBody(bodySchema,patchHandler))
-    // patch:yupAddressIndexBody(bodySchema,authMiddleware(patchHandler))
-// })
-// export default yupAddressIndexBody(bodySchema, handler)
-// export default authMiddleware(handler)

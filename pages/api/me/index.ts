@@ -16,7 +16,7 @@ async function getHandler(req:NextApiRequest, res:NextApiResponse, token){
     const user = new User(token.userId)
     await user.pull()    
     const data = user.data
-    //data.id give me my id in firebase
+    
     res.send({data})
 }
 
@@ -38,17 +38,7 @@ async function patchHandler(req:NextApiRequest, res:NextApiResponse, token){
             upgraded:false
         })
     }
-
 }
-
-// const patch = yupMeIndexBody(bodySchema, patchHandler)
-// const handlers = methods({
-//     get: getHandler,
-//     patch
-// })
-// export default authMiddleware(handlers)
-// export default meHandlerMiddleware(handler)
-
 export default methods({
     get: authMiddleware(getHandler),
     patch:yupMeIndexBody(bodySchema,authMiddleware(patchHandler))

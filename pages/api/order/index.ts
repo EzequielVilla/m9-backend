@@ -13,7 +13,7 @@ interface dataFromBody{
 }
 
 
-async function getHandler(req:NextApiRequest, res:NextApiResponse,token) {
+async function postHandler(req:NextApiRequest, res:NextApiResponse,token) {
     const productId = req.query.productId as string;
     const {data} = req.body as dataFromBody; 
 
@@ -25,9 +25,9 @@ async function getHandler(req:NextApiRequest, res:NextApiResponse,token) {
 
 
 
-const get = authMiddleware(getHandler)
+const post = authMiddleware(postHandler)
 const handler =  methods({
-    get,
+    post,
 })
 
 export default yupOrderQuery(bodySchema,handler)

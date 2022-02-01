@@ -6,7 +6,7 @@ import { yupIpnMercadopagoQuery } from "lib/middlewares";
 
 const querySchema = yup.object().shape({
     topic: yup.string().required(),
-    id: yup.number().required(),
+    id: yup.string().required(),
 }).noUnknown(true).strict();
 
 
