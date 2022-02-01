@@ -13,10 +13,16 @@ const querySchema = yup.object().shape({
 async function getHandler(req:NextApiRequest, res:NextApiResponse){
     
     const result = await findResultById(req)
-    
-    res.send({
-        result
-    })
+    if(result){
+        res.send({
+            result
+        })
+    }
+    else{
+        res.send({
+            message: "No product finded with that id"
+        })
+    }
 }
 
 const handler =  methods({
