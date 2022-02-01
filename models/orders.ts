@@ -24,6 +24,10 @@ export class Order{
         newOrder.data = data;
         return newOrder;
         }
+    static async getOrderById(orderId:string):Promise<any>{
+        return (await (collection.doc(orderId).get())).data();
 
+        
+    }    
 }
 

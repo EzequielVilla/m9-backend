@@ -6,9 +6,12 @@ import {decode} from "lib/jwt"
 interface YupFunction{
     (req:NextApiRequest,res:NextApiResponse):Promise<void>
 }
+interface callbackFunction{
+    (req:NextApiRequest,res:NextApiResponse):void
+}
 
 
-export function authMiddleware(callback?){    
+export function authMiddleware(callback? ){    
     return function(req:NextApiRequest, res:NextApiResponse){
         const token = parseToken(req)
         if(!token){
@@ -16,7 +19,7 @@ export function authMiddleware(callback?){
                 message: "No hay decodedToken"
             })
         }
-        const decodedToken = decode(token)        
+        const decodedToken:string = decode(token)        
         if(decodedToken){
             callback(req,res, decodedToken);
         } else{
@@ -27,7 +30,7 @@ export function authMiddleware(callback?){
 
 
 //Two checks for AUTH API endpoint
-export function yupAuthIndexBody(bodySchema:yup.ObjectSchema<any>,callback):YupFunction{
+export function yupAuthIndexBody(bodySchema:yup.ObjectSchema<any>,callback:callbackFunction):YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
         try{
             await bodySchema.validate(req.body)
@@ -37,7 +40,7 @@ export function yupAuthIndexBody(bodySchema:yup.ObjectSchema<any>,callback):YupF
         }
     }
 }
-export function yupAuthTokenBody(bodySchema:yup.ObjectSchema<any>,callback):YupFunction{
+export function yupAuthTokenBody(bodySchema:yup.ObjectSchema<any>,callback:callbackFunction):YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
         try{
             await bodySchema.validate(req.body)
@@ -49,7 +52,7 @@ export function yupAuthTokenBody(bodySchema:yup.ObjectSchema<any>,callback):YupF
 }
 //
 //ME
-export function yupMeIndexBody(bodySchema:yup.ObjectSchema<any>, callback):YupFunction{
+export function yupMeIndexBody(bodySchema:yup.ObjectSchema<any>, callback:callbackFunction):YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
         try{
             await bodySchema.validate(req.body)
@@ -60,7 +63,7 @@ export function yupMeIndexBody(bodySchema:yup.ObjectSchema<any>, callback):YupFu
     }
 }
 //ADDRESS
-export function yupAddressIndexBody(bodySchema:yup.ObjectSchema<any>, callback):YupFunction{
+export function yupAddressIndexBody(bodySchema:yup.ObjectSchema<any>, callback:callbackFunction):YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
         try{
             await bodySchema.validate(req.body)
@@ -72,7 +75,7 @@ export function yupAddressIndexBody(bodySchema:yup.ObjectSchema<any>, callback):
 }
 //SEARCH
 
-export function yupSearchIndexQuery(querySchema:yup.ObjectSchema<any>, callback):YupFunction{
+export function yupSearchIndexQuery(querySchema:yup.ObjectSchema<any>, callback:callbackFunction):YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
         try{
             await querySchema.validate(req.query)
@@ -84,7 +87,7 @@ export function yupSearchIndexQuery(querySchema:yup.ObjectSchema<any>, callback)
 }
 
 //PRODUCTS
-export function yupProductsIdQuery (querySchema:yup.ObjectSchema<any>, callback): YupFunction{
+export function yupProductsIdQuery (querySchema:yup.ObjectSchema<any>, callback:callbackFunction): YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
         try{
             await querySchema.validate(req.query)
@@ -95,7 +98,7 @@ export function yupProductsIdQuery (querySchema:yup.ObjectSchema<any>, callback)
     }
 }
 //ORDER
-export function yupOrderQuery (querySchema:yup.ObjectSchema<any>, callback): YupFunction{
+export function yupOrderQuery (querySchema:yup.ObjectSchema<any>, callback:callbackFunction): YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
         try{
             await querySchema.validate(req.query)
@@ -105,9 +108,18 @@ export function yupOrderQuery (querySchema:yup.ObjectSchema<any>, callback): Yup
         }
     }
 }
-
+export function yupOrderIdquery (querySchema:yup.ObjectSchema<any>, callback:callbackFunction): YupFunction{
+    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
+        try{
+            await querySchema.validate(req.query)
+            callback(req,res)
+        }catch(e){
+            res.status(422).send({field:"query", message: e})
+        }
+    }
+}
 //IPN-MERCADOPAGO/
-export function yupIpnMercadopagoQuery (querySchema:yup.ObjectSchema<any>, callback): YupFunction{
+export function yupIpnMercadopagoQuery (querySchema:yup.ObjectSchema<any>, callback:callbackFunction): YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
         try{
             await querySchema.validate(req.query)

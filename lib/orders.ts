@@ -33,17 +33,24 @@ export async function createOrder(userId:string,productId:string,extraData?):Pro
             status: false,
         })
         return newOrder
-    }          
-    
-       
-    
+    }           
+}
+
+//productData come from algolia
+
+function getDataFromProduct(productData):ProductData{
+    const unitCost = productData["Unit cost"];
+    const name = productData["Name"];
+    const inStock = productData["In stock"];
+    const data = {unitCost,name,inStock};
+    return data;
 }
 
 export function getDataForPreference(orderData:orderData, orderId:string,userEmail:string){
     const notificationURL = process.env.NODE_ENV == "development"? 
                         "https://webhook.site/ccd207f0-8a90-451c-a893-4c6954014ebe":
-                        'direccionvercel/api/ipn/mercadopago';
-      
+                        'https://dm9-desafio.vercel.app/api/ipn/mercadopago';
+    //userEmail is for payer email  
     return {
         "items": [
             {
@@ -74,13 +81,3 @@ export function getDataForPreference(orderData:orderData, orderId:string,userEma
 }
 
 
-
-//productData come from algolia
-
-function getDataFromProduct(productData):ProductData{
-    const unitCost = productData["Unit cost"];
-    const name = productData["Name"];
-    const inStock = productData["In stock"];
-    const data = {unitCost,name,inStock};
-    return data;
-}

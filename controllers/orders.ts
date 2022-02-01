@@ -21,9 +21,9 @@ export async function getRedirectAndCreateOrder(productId:string, token,data?){
     return resPreference.init_point;
 }
 
-export async function getOrderData(token){
-    const user = new User(token.userId)     
-
+export async function getOrderFromDB(orderId:string){
+    return await Order.getOrderById(orderId);  
+    
 }
 
 export async function getOrderStatus(id:string, topic:string){
