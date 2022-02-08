@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router"
 import * as yup from "yup"
 import { authMiddleware, yupOrderQuery } from "lib/middlewares";
-import { getRedirectAndCreateOrder } from "controllers/orders";
+import { getRedirectAndIdAndCreateOrder } from "controllers/orders";
 
 const bodySchema = yup.object().shape({
     productId: yup.string().required(), 
@@ -17,9 +17,10 @@ async function postHandler(req:NextApiRequest, res:NextApiResponse,token) {
     const productId = req.query.productId as string;
     const {data} = req.body as dataFromBody; 
 
-    const pageToRedirect = await getRedirectAndCreateOrder(productId,token, data)
+    const {redirectTo,orderId} = await getRedirectAndIdAndCreateOrder(productId,token, data)
     res.send({
-        redirecTo: pageToRedirect
+        redirectTo,
+        orderId
     })
 }
 

@@ -5,10 +5,13 @@ import { Order } from "models/orders";
 import { User } from "models/user";
 
 
+interface RedirectAndId{
+    redirectTo:string,
+    orderId:string
+}
 
 
-
-export async function getRedirectAndCreateOrder(productId:string, token,data?):Promise<string>{
+export async function getRedirectAndIdAndCreateOrder(productId:string, token,data?):Promise<RedirectAndId>{
     const user = new User(token.userId)     
     await user.pull()
     const userEmail = user.data.email;
@@ -17,8 +20,12 @@ export async function getRedirectAndCreateOrder(productId:string, token,data?):P
     const orderData:orderData = newOrder.data;
     const orderId = newOrder.id;
     const dataForPreference = getDataForPreference(orderData,orderId,userEmail);
-    const resPreference = await createPreference(dataForPreference)    
-    return resPreference.init_point;
+    const resPreference = await createPreference(dataForPreference)  
+    const resData = {
+        redirectTo: resPreference.init_point,
+        orderId,
+    }  
+    return resData;
 }
 
 export async function getOrderFromDB(orderId:string):Promise<orderData>{
