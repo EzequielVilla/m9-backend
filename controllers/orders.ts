@@ -34,7 +34,6 @@ export async function getOrderFromDB(orderId:string):Promise<orderData>{
 }
 
 
-
 export async function getOrderId(id:string,topic:string){
     const order = await getOrderStatus(id,topic);
     const orderId = await checkOrderStatusAndProcess(order);
