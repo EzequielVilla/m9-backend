@@ -1,5 +1,5 @@
 import { createPreference, getMerchantOrder } from "lib/mercadopago";
-import { createOrder, getDataForPreference } from "lib/orders";
+import { checkOrderStatusAndProcess, createOrder, getDataForPreference, getOrderStatus } from "lib/orders";
 import { sendBuyerEmail, sendSellerEmail } from "lib/sendgrid";
 import { Order } from "models/orders";
 import { User } from "models/user";
@@ -33,24 +33,11 @@ export async function getOrderFromDB(orderId:string):Promise<orderData>{
     
 }
 
-export async function getOrderStatus(id:string, topic:string){
-    if(topic == "merchant_order") return await getMerchantOrder(id);
-}
 
-export async function checkOrderStatusAndProcess(order):Promise<string>{
-    if(order.order_status == "paid"){
-        const orderId:string= order.external_reference;
-        const myOrder = new Order(orderId);
-        await myOrder.pull();
-        myOrder.data.status = true;
-        await myOrder.push();
-        const buyerEmail = order.payer.email;
-        const sellerEmail = order.collector.email;
-        const itemSelled = order.items
-        sendBuyerEmail(buyerEmail);
-        sendSellerEmail(sellerEmail, itemSelled );
-        return orderId;
-    }
-}
 
+export async function getOrderId(id:string,topic:string){
+    const order = await getOrderStatus(id,topic);
+    const orderId = await checkOrderStatusAndProcess(order);
+    return orderId;
+}
 

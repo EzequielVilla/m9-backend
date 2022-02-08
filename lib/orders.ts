@@ -1,11 +1,34 @@
 
 import { Order } from "models/orders";
 import { searchById } from "models/products";
+import { getMerchantOrder } from "./mercadopago";
+import { sendBuyerEmail, sendSellerEmail } from "./sendgrid";
 
 interface ProductData{
     unitCost: number,
     name:string,
     inStock:boolean
+}
+
+
+export async function getOrderStatus(id:string, topic:string){
+    if(topic == "merchant_order") return await getMerchantOrder(id);
+}
+
+export async function checkOrderStatusAndProcess(order):Promise<string>{
+    if(order.order_status == "paid"){
+        const orderId:string= order.external_reference;
+        const myOrder = new Order(orderId);
+        await myOrder.pull();
+        myOrder.data.status = true;
+        await myOrder.push();
+        const buyerEmail = order.payer.email;
+        const sellerEmail = order.collector.email;
+        const itemSelled = order.items
+        sendBuyerEmail(buyerEmail);
+        sendSellerEmail(sellerEmail, itemSelled );
+        return orderId;
+    }
 }
 
 export async function createOrder(userId:string,productId:string,extraData?):Promise<Order>{    
