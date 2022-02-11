@@ -12,3 +12,14 @@ export async function searchById(id:string){
     const result = await productsIndex.getObject(id)    
     return result;
 }
+
+export async function getAllProductsFromDB(){
+  
+    return await productsIndex.search("")
+    
+  
+    
+    
+       
+    
+}

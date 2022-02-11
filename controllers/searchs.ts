@@ -1,5 +1,5 @@
 
-import { getResultsFromQuery, searchById } from "models/products";
+import { getAllProductsFromDB, getResultsFromQuery, searchById } from "models/products";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export async function findResults(req:NextApiRequest,limit:number,offset:number):Promise<any>{
@@ -10,4 +10,10 @@ export async function findResultById(req:NextApiRequest):Promise<any>{
     
     const id = req.query.id as string;
     return searchById(id);
+}
+
+export async function getAllProducts():Promise<any>{
+    return await getAllProductsFromDB();
+  
+    
 }
