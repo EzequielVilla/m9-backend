@@ -72,7 +72,7 @@ function getDataFromProduct(productData):ProductData{
 export function getDataForPreference(orderData:orderData, orderId:string,userEmail:string){
     const notificationURL = process.env.NODE_ENV == "development"? 
                         "https://webhook.site/ccd207f0-8a90-451c-a893-4c6954014ebe":
-                        'https://dm9-desafio.vercel.app/api/ipn/mercadopago';
+                        'https://m9-desafio.vercel.app/api/ipn/mercadopago';
     //userEmail is for payer email  
     return {
         "items": [

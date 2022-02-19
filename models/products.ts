@@ -13,7 +13,7 @@ export async function searchById(id:string){
     return result;
 }
 
-export async function getAllProductsFromDB(){
+export async function getAllProductsFromDB():Promise<any>{
   
     return await productsIndex.search("")
     
