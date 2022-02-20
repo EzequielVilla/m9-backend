@@ -5,7 +5,6 @@ import methods from "micro-method-router"
 import * as yup from "yup"
 import { yupAuthIndexBody } from "lib/middlewares";
 // import initMiddleware from "lib/init-middleware";
-import NextCors from 'nextjs-cors';
 
 // Initialize the cors middleware
 // const cors = initMiddleware(
@@ -23,12 +22,7 @@ const bodySchema = yup.object().shape({
 
 
 async function postHandler(req:NextApiRequest, res:NextApiResponse){
-    await NextCors(req, res, {
-        // Options
-        methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-        origin: '*',
-        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-     });
+    
     // await cors(req, res)
     const {email} = req.body
     await findOrCreateAuth(email);
