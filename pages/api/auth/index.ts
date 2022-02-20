@@ -18,7 +18,7 @@ async function postHandler(req:NextApiRequest, res:NextApiResponse){
     await findOrCreateAuth(email);
     const auth = await sendCode(email)     
     const emailSended = await sendCodeEmail(email,auth.data.code) 
-    res.send({emailSended})
+    res.status(200).send({emailSended})
     
 }
 
