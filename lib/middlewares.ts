@@ -37,7 +37,11 @@ export default function initMiddleware(middleware) {
 
 export function authMiddleware(callback? ){    
     return async function(req:NextApiRequest, res:NextApiResponse){
+        console.log({message:"before cors"});
+        
         await cors(req, res)
+        console.log({message:"after cors"});
+        
         const token = parseToken(req)
         if(!token){
             res.status(401).send({
