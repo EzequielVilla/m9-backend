@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import * as yup from "yup";
 import parseToken from "parse-bearer-token";
 import {decode} from "lib/jwt"
+import Cors from 'cors'
 
 interface YupFunction{
     (req:NextApiRequest,res:NextApiResponse):Promise<void>
@@ -9,6 +10,18 @@ interface YupFunction{
 interface callbackFunction{
     (req:NextApiRequest,res:NextApiResponse):void
 }
+
+
+
+
+// Initialize the cors middleware
+const cors = initMiddleware(
+  // You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
+  Cors({
+    // Only allow requests with GET, POST and OPTIONS
+    methods: ['GET', 'POST', 'OPTIONS'],
+  })
+)
 export default function initMiddleware(middleware) {
     return (req, res) =>
       new Promise((resolve, reject) => {
@@ -23,7 +36,8 @@ export default function initMiddleware(middleware) {
 
 
 export function authMiddleware(callback? ){    
-    return function(req:NextApiRequest, res:NextApiResponse){
+    return async function(req:NextApiRequest, res:NextApiResponse){
+        await cors(req, res)
         const token = parseToken(req)
         if(!token){
             res.status(401).send({
@@ -42,7 +56,8 @@ export function authMiddleware(callback? ){
 
 //Two checks for AUTH API endpoint
 export function yupAuthIndexBody(bodySchema:yup.ObjectSchema<any>,callback:callbackFunction):YupFunction{
-    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
+    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{
+        await cors(req, res)   
         try{
             await bodySchema.validate(req.body)
             callback(req,res)           
@@ -53,6 +68,7 @@ export function yupAuthIndexBody(bodySchema:yup.ObjectSchema<any>,callback:callb
 }
 export function yupAuthTokenBody(bodySchema:yup.ObjectSchema<any>,callback:callbackFunction):YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
+        await cors(req, res)
         try{
             await bodySchema.validate(req.body)
             callback(req,res)           
@@ -65,6 +81,7 @@ export function yupAuthTokenBody(bodySchema:yup.ObjectSchema<any>,callback:callb
 //ME
 export function yupMeIndexBody(bodySchema:yup.ObjectSchema<any>, callback:callbackFunction):YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
+        await cors(req, res)
         try{
             await bodySchema.validate(req.body)
             callback(req,res)
@@ -75,7 +92,8 @@ export function yupMeIndexBody(bodySchema:yup.ObjectSchema<any>, callback:callba
 }
 //ADDRESS
 export function yupAddressIndexBody(bodySchema:yup.ObjectSchema<any>, callback:callbackFunction):YupFunction{
-    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
+    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{  
+        await cors(req, res) 
         try{
             await bodySchema.validate(req.body)
             callback(req,res)
@@ -87,7 +105,8 @@ export function yupAddressIndexBody(bodySchema:yup.ObjectSchema<any>, callback:c
 //SEARCH
 
 export function yupSearchIndexQuery(querySchema:yup.ObjectSchema<any>, callback:callbackFunction):YupFunction{
-    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
+    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{
+        await cors(req, res)   
         try{
             await querySchema.validate(req.query)
             callback(req,res)
@@ -100,6 +119,7 @@ export function yupSearchIndexQuery(querySchema:yup.ObjectSchema<any>, callback:
 //PRODUCTS
 export function yupProductsIdQuery (querySchema:yup.ObjectSchema<any>, callback:callbackFunction): YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
+        await cors(req, res)
         try{
             await querySchema.validate(req.query)
             callback(req,res)
@@ -110,7 +130,8 @@ export function yupProductsIdQuery (querySchema:yup.ObjectSchema<any>, callback:
 }
 //ORDER
 export function yupOrderQuery (querySchema:yup.ObjectSchema<any>, callback:callbackFunction): YupFunction{
-    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
+    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{  
+        await cors(req, res) 
         try{
             await querySchema.validate(req.query)
             callback(req,res)
@@ -120,7 +141,8 @@ export function yupOrderQuery (querySchema:yup.ObjectSchema<any>, callback:callb
     }
 }
 export function yupOrderIdquery (querySchema:yup.ObjectSchema<any>, callback:callbackFunction): YupFunction{
-    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
+    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{ 
+        await cors(req, res)  
         try{
             await querySchema.validate(req.query)
             callback(req,res)
@@ -131,7 +153,8 @@ export function yupOrderIdquery (querySchema:yup.ObjectSchema<any>, callback:cal
 }
 //IPN-MERCADOPAGO/
 export function yupIpnMercadopagoQuery (querySchema:yup.ObjectSchema<any>, callback:callbackFunction): YupFunction{
-    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
+    return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{  
+        await cors(req, res) 
         try{
             await querySchema.validate(req.query)
             callback(req,res)
