@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router"
-import { authMiddleware,yupMeIndexBody } from "lib/middlewares";
+import { authMiddleware,cors,yupMeIndexBody } from "lib/middlewares";
 import { User } from "models/user";
 import * as yup from "yup"
 import { upgradeUser } from "controllers/user";
@@ -13,6 +13,7 @@ const bodySchema = yup.object().shape({
 });
 
 async function getHandler(req:NextApiRequest, res:NextApiResponse, token){
+    await cors(req, res)
     const user = new User(token.userId)
     await user.pull()    
     const data = user.data
