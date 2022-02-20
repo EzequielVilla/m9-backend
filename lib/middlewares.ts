@@ -9,6 +9,17 @@ interface YupFunction{
 interface callbackFunction{
     (req:NextApiRequest,res:NextApiResponse):void
 }
+export default function initMiddleware(middleware) {
+    return (req, res) =>
+      new Promise((resolve, reject) => {
+        middleware(req, res, (result) => {
+          if (result instanceof Error) {
+            return reject(result)
+          }
+          return resolve(result)
+        })
+      })
+  }
 
 
 export function authMiddleware(callback? ){    
