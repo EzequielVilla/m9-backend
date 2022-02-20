@@ -15,7 +15,7 @@ const bodySchema = yup.object().shape({
 async function getHandler(req:NextApiRequest, res:NextApiResponse) {
     const orderId = req.query.orderId as string;
     const data = await getOrderFromDB(orderId);
-    res.send({data})
+    res.status(200).send({data})
 }
 
 

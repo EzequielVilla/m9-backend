@@ -16,12 +16,12 @@ async function patchHandler(req:NextApiRequest, res:NextApiResponse, token){
     
     
     if(upgradedAddress){
-        res.send({
+        res.status(200).send({
             messagge:"user upgraded",
             upgraded:true
         })
     }else{
-        res.send({
+        res.status(400).send({
             messagge:"error during the operation",
             upgraded:false
         })

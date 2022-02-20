@@ -16,7 +16,7 @@ const querySchema = yup.object().shape({
 async function getHandler(req:NextApiRequest, res:NextApiResponse){
     const {limit,offset} = getOffsetAndLimitFromReq(req);
     const results =  await findResults(req,limit,offset)
-    res.send({
+    res.status(200).send({
         results: results.hits,
         pagination:{
             offset,

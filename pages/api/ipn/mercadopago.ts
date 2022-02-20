@@ -16,7 +16,7 @@ async function postHandler(req:NextApiRequest, res:NextApiResponse) {
     const id = req.query.id as string;
     const topic = req.query.topic as string;
     const orderId = await getOrderId(id,topic);
-    res.send({
+    res.status(200).send({
         orderId
     })
 }

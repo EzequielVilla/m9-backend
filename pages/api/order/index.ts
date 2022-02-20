@@ -18,7 +18,7 @@ async function postHandler(req:NextApiRequest, res:NextApiResponse,token) {
     const {data} = req.body as dataFromBody; 
 
     const {redirectTo,orderId} = await getRedirectAndIdAndCreateOrder(productId,token, data)
-    res.send({
+    res.status(200).send({
         redirectTo,
         orderId
     })

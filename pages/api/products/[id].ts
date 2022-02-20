@@ -14,12 +14,12 @@ async function getHandler(req:NextApiRequest, res:NextApiResponse){
     
     const result = await findResultById(req)
     if(result){
-        res.send({
+        res.status(200).send({
             result
         })
     }
     else{
-        res.send({
+        res.status(400).send({
             message: "No product finded with that id"
         })
     }

@@ -29,7 +29,7 @@ async function postHandler(req:NextApiRequest, res:NextApiResponse) {
     const correctInfo = checkCodeAndExpiration(data.code, code , data.expires)
     if(correctInfo){
         let token = generate({userId:data.userId})
-        res.send({token})
+        res.status(200).send({token})
     }else{
         res.status(401).send({message: "Wrong code or email"})
     }    
