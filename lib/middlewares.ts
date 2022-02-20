@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import * as yup from "yup";
 import parseToken from "parse-bearer-token";
 import {decode} from "lib/jwt"
-import NextCors from 'nextjs-cors';
 
 interface YupFunction{
     (req:NextApiRequest,res:NextApiResponse):Promise<void>
@@ -33,12 +32,6 @@ export function authMiddleware(callback? ){
 //Two checks for AUTH API endpoint
 export function yupAuthIndexBody(bodySchema:yup.ObjectSchema<any>,callback:callbackFunction):YupFunction{
     return async function(req:NextApiRequest,res:NextApiResponse): Promise<void>{   
-        await NextCors(req, res, {
-            // Options
-            methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-            origin: '*',
-            optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-         });
         try{
             await bodySchema.validate(req.body)
             callback(req,res)           
