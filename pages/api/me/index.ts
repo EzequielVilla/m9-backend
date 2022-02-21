@@ -11,14 +11,18 @@ const bodySchema = yup.object().shape({
     email: yup.string().required(),
     other: yup.object(),
 });
-
 async function getHandler(req:NextApiRequest, res:NextApiResponse, token){
-    await cors(req, res)
-    const user = new User(token.userId)
-    await user.pull()    
-    const data = user.data
-    
-    res.send({data})
+    try {
+        await cors(req, res)
+        const user = new User(token.userId)
+        await user.pull()    
+        const data = user.data
+        
+        res.status(200).send({data})
+        
+    } catch (error) {
+        console.log(error);     
+    }
 }
 
 async function patchHandler(req:NextApiRequest, res:NextApiResponse, token){

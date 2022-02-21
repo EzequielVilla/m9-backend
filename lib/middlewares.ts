@@ -19,7 +19,7 @@ export const cors = initMiddleware(
   // You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
   Cors({
     // Only allow requests with GET, POST and OPTIONS
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST',"PATCH"],
   })
 )
 export default function initMiddleware(middleware) {
@@ -37,7 +37,7 @@ export default function initMiddleware(middleware) {
 
 export function authMiddleware(callback? ){    
     return async function(req:NextApiRequest, res:NextApiResponse){
-        console.log({message:"before cors"});
+        console.log({meesage:"before cors"});
         
         await cors(req, res)
         console.log({message:"after cors"});
