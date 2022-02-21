@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router"
 import { getAllProducts } from "controllers/searchs";
+import { cors } from "lib/middlewares";
 
 
 
@@ -21,6 +22,7 @@ async function getHandler(req:NextApiRequest, res:NextApiResponse){
 }
 
 const handler =  methods({
+    options:cors,
     get: getHandler
 })
 

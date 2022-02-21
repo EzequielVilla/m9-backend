@@ -13,7 +13,6 @@ const bodySchema = yup.object().shape({
 });
 async function getHandler(req:NextApiRequest, res:NextApiResponse, token){
     try {
-        await cors(req, res)
         const user = new User(token.userId)
         await user.pull()    
         const data = user.data
