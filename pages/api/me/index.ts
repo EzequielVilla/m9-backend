@@ -45,6 +45,7 @@ async function patchHandler(req:NextApiRequest, res:NextApiResponse, token){
     }
 }
 export default methods({
+    options:cors,
     get: authMiddleware(getHandler),
     patch:yupMeIndexBody(bodySchema,authMiddleware(patchHandler))
 })
