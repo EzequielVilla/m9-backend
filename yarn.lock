@@ -2169,7 +2169,7 @@ merge2@^1.3.0, merge2@^1.4.1:
 
 micro-method-router@^0.1.0:
   version "0.1.0"
-  resolved "https://registry.npmjs.org/micro-method-router/-/micro-method-router-0.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/micro-method-router/-/micro-method-router-0.1.0.tgz#d51d905e8117ce219e847bee505721a46a30ab2f"
   integrity sha1-1R2QXoEXziGehHvuUFchpGowqy8=
 
 micromatch@^4.0.4:

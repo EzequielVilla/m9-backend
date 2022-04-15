@@ -49,7 +49,7 @@ export function checkCodeAndExpiration(code:number, codeFromBody:number, expires
     return (compareCode(code,codeFromBody) && isExpired(expires));
 }
 function compareCode(code:number, codeFromBody:number):boolean{
-    return code === codeFromBody;
+    return code == codeFromBody;
 }
 function isExpired(expires:Timestamp):boolean{
     const nowTime = new Date().getTime()/1000;
