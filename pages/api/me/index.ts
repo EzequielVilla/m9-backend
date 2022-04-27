@@ -49,9 +49,3 @@ export default methods({
   get: authMiddleware(getHandler),
   patch: yupMeIndexBody(bodySchema, authMiddleware(patchHandler)),
 });
-
-async function aux(req: NextApiRequest, res: NextApiResponse) {
-  console.log({ req, res });
-
-  await cors(req, res);
-}

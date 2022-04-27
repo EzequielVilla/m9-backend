@@ -1,5 +1,6 @@
 import { Order } from "models/orders";
 import { searchById } from "models/products";
+import { User } from "models/user";
 import { getMerchantOrder } from "./mercadopago";
 import { sendBuyerEmail, sendSellerEmail } from "./sendgrid";
 
@@ -20,10 +21,14 @@ export async function checkOrderStatusAndProcess(order): Promise<string> {
     await myOrder.pull();
     myOrder.data.status = true;
     await myOrder.push();
-    const buyerEmail = order.payer.email;
+    //modificar esto por que usuario vendio, el order.collector.email no funciona.
     const sellerEmail = order.collector.email;
+    const userId = myOrder.data.userId;
+    const buyer = new User(userId);
+    await buyer.pull();
+    const buyerEmail = buyer.data.email;
     const itemSelled = order.items;
-    sendBuyerEmail(buyerEmail);
+    sendBuyerEmail(buyerEmail, itemSelled);
     sendSellerEmail(sellerEmail, itemSelled);
     return orderId;
   }
@@ -75,9 +80,11 @@ export function getDataForPreference(
   orderId: string,
   userEmail: string
 ) {
+  console.log({ userEmail });
+
   const notificationURL =
     process.env.NODE_ENV == "development"
-      ? "https://webhook.site/ccd207f0-8a90-451c-a893-4c6954014ebe"
+      ? "https://webhook.site/b90263f2-9714-4b44-8b3a-2af1f61d2d3a"
       : "https://m9-desafio.vercel.app/api/ipn/mercadopago";
   //userEmail is for payer email
   return {
@@ -103,7 +110,7 @@ export function getDataForPreference(
       email: "",
     },
     payer: {
-      email: "",
+      email: `${userEmail}`,
     },
   };
 }

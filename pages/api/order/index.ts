@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { authMiddleware, yupOrderQuery } from "lib/middlewares";
 import { getRedirectAndIdAndCreateOrder } from "controllers/orders";
 
-const bodySchema = yup.object().shape({
+const querySchema = yup.object().shape({
   productId: yup.string().required(),
   data: yup.object(),
 });
@@ -32,4 +32,4 @@ const handler = methods({
   post,
 });
 
-export default yupOrderQuery(bodySchema, handler);
+export default yupOrderQuery(querySchema, handler);
