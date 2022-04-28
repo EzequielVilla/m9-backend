@@ -28,8 +28,6 @@ export async function checkOrderStatusAndProcess(order): Promise<string> {
     await buyer.pull();
     const buyerEmail = buyer.data.email;
     const itemSelled = order.items;
-    console.log({ buyerEmail, buyer, userId, myOrder });
-
     sendBuyerEmail(buyerEmail, itemSelled);
     sendSellerEmail(sellerEmail, itemSelled);
     return orderId;
