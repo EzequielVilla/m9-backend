@@ -28,6 +28,8 @@ export async function checkOrderStatusAndProcess(order): Promise<string> {
     await buyer.pull();
     const buyerEmail = buyer.data.email;
     const itemSelled = order.items;
+    console.log({ buyerEmail, buyer, userId, myOrder });
+
     sendBuyerEmail(buyerEmail, itemSelled);
     sendSellerEmail(sellerEmail, itemSelled);
     return orderId;
@@ -80,8 +82,6 @@ export function getDataForPreference(
   orderId: string,
   userEmail: string
 ) {
-  console.log({ userEmail });
-
   const notificationURL =
     process.env.NODE_ENV == "development"
       ? "https://webhook.site/b90263f2-9714-4b44-8b3a-2af1f61d2d3a"

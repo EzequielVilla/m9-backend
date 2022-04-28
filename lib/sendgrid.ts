@@ -28,7 +28,6 @@ export async function sendCodeEmail(
 export async function sendBuyerEmail(email: string, itemSelled) {
   SendGrid.setApiKey(process.env.SENDGRID_KEY);
   const item = itemSelled[0].title;
-  console.log({ itemSelled: itemSelled[0].title });
 
   const msg = {
     to: email,

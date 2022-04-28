@@ -27,7 +27,6 @@ export async function getRedirectAndIdAndCreateOrder(
   const orderData: orderData = newOrder.data;
   const orderId = newOrder.id;
   const dataForPreference = getDataForPreference(orderData, orderId, userEmail);
-  console.log({ dataForPreference });
 
   const resPreference = await createPreference(dataForPreference);
   const resData = {
