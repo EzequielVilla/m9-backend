@@ -110,7 +110,7 @@ export function getDataForPreference(
       email: "",
     },
     payer: {
-      email: `${userEmail}`,
+      email: ``,
     },
   };
 }
