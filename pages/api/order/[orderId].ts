@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import * as yup from "yup";
-import { yupOrderIdquery } from "lib/middlewares";
+import { yupMiddleware } from "lib/middlewares";
 import { getOrderFromDB } from "controllers/orders";
 
 const bodySchema = yup
@@ -23,4 +23,4 @@ const handler = methods({
   get: getHandler,
 });
 
-export default yupOrderIdquery(bodySchema, handler);
+export default yupMiddleware(bodySchema, handler);

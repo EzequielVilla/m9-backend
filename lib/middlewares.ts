@@ -11,6 +11,23 @@ interface callbackFunction {
   (req: NextApiRequest, res: NextApiResponse): void;
 }
 
+import mongoose from "mongoose";
+import { parseBody } from "next/dist/server/api-utils";
+
+export const connectDB = (handler) => async (req, res) => {
+  try {
+    if (mongoose.connections[0].readyState) {
+      // Use current db connection
+      return handler(req, res);
+    }
+    // Use new db connection
+    await mongoose.connect(process.env.mongodburl);
+    return handler(req, res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 // Initialize the cors middleware
 export const cors = initMiddleware(
   // You can read more about the available options here: https://github.com/expressjs/cors#configuration-options
@@ -49,9 +66,8 @@ export function authMiddleware(callback?) {
   };
 }
 
-//Two checks for AUTH API endpoint
-export function yupAuthIndexBody(
-  bodySchema: yup.ObjectSchema<any>,
+export function yupMiddleware(
+  schema: yup.ObjectSchema<any>,
   callback: callbackFunction
 ): YupFunction {
   return async function (
@@ -59,156 +75,15 @@ export function yupAuthIndexBody(
     res: NextApiResponse
   ): Promise<void> {
     await cors(req, res);
-    try {
-      await bodySchema.validate(req.body);
-      callback(req, res);
-    } catch (e) {
-      res.status(422).send({ field: "body", message: e });
-    }
-  };
-}
-export function yupAuthTokenBody(
-  bodySchema: yup.ObjectSchema<any>,
-  callback: callbackFunction
-): YupFunction {
-  return async function (
-    req: NextApiRequest,
-    res: NextApiResponse
-  ): Promise<void> {
-    await cors(req, res);
-    try {
-      await bodySchema.validate(req.body);
-      callback(req, res);
-    } catch (e) {
-      res.status(422).send({ field: "body", message: e });
-    }
-  };
-}
-//
-//ME
-export function yupMeIndexBody(
-  bodySchema: yup.ObjectSchema<any>,
-  callback: callbackFunction
-): YupFunction {
-  return async function (
-    req: NextApiRequest,
-    res: NextApiResponse
-  ): Promise<void> {
-    await cors(req, res);
-    try {
-      await bodySchema.validate(req.body);
-      callback(req, res);
-    } catch (e) {
-      res.status(422).send({ field: "body", message: e });
-    }
-  };
-}
-//ADDRESS
-export function yupAddressIndexBody(
-  bodySchema: yup.ObjectSchema<any>,
-  callback: callbackFunction
-): YupFunction {
-  return async function (
-    req: NextApiRequest,
-    res: NextApiResponse
-  ): Promise<void> {
-    await cors(req, res);
-    try {
-      await bodySchema.validate(req.body);
-      callback(req, res);
-    } catch (e) {
-      res.status(422).send({ field: "body", message: e });
-    }
-  };
-}
-//SEARCH
+    const toValidate = req.body
+      ? { req: req.body, field: "body" }
+      : { req: req.query, field: "query" };
 
-export function yupSearchIndexQuery(
-  querySchema: yup.ObjectSchema<any>,
-  callback: callbackFunction
-): YupFunction {
-  return async function (
-    req: NextApiRequest,
-    res: NextApiResponse
-  ): Promise<void> {
-    await cors(req, res);
     try {
-      await querySchema.validate(req.query);
+      await schema.validate(toValidate.req);
       callback(req, res);
     } catch (e) {
-      res.status(422).send({ field: "query", message: e });
-    }
-  };
-}
-
-//PRODUCTS
-export function yupProductsIdQuery(
-  querySchema: yup.ObjectSchema<any>,
-  callback: callbackFunction
-): YupFunction {
-  return async function (
-    req: NextApiRequest,
-    res: NextApiResponse
-  ): Promise<void> {
-    await cors(req, res);
-    try {
-      await querySchema.validate(req.query);
-      callback(req, res);
-    } catch (e) {
-      res.status(422).send({ field: "query", message: e });
-    }
-  };
-}
-//ORDER
-export function yupOrderQuery(
-  querySchema: yup.ObjectSchema<any>,
-  callback: callbackFunction
-): YupFunction {
-  return async function (
-    req: NextApiRequest,
-    res: NextApiResponse
-  ): Promise<void> {
-    await cors(req, res);
-    try {
-      await querySchema.validate(req.query);
-      callback(req, res);
-    } catch (e) {
-      res.status(422).send({ field: "query", message: e });
-    }
-  };
-}
-export function yupOrderIdquery(
-  querySchema: yup.ObjectSchema<any>,
-  callback: callbackFunction
-): YupFunction {
-  return async function (
-    req: NextApiRequest,
-    res: NextApiResponse
-  ): Promise<void> {
-    await cors(req, res);
-    try {
-      await querySchema.validate(req.query);
-      callback(req, res);
-    } catch (e) {
-      res.status(422).send({ field: "query", message: e });
-    }
-  };
-}
-//IPN-MERCADOPAGO/
-export function yupIpnMercadopagoQuery(
-  querySchema: yup.ObjectSchema<any>,
-  callback: callbackFunction
-): YupFunction {
-  return async function (
-    req: NextApiRequest,
-    res: NextApiResponse
-  ): Promise<void> {
-    await cors(req, res);
-    try {
-      await querySchema.validate(req.query);
-      callback(req, res);
-    } catch (e) {
-      res.status(422).send({ field: "query", message: e });
+      res.status(422).send({ field: toValidate.field, message: e });
     }
   };
 }

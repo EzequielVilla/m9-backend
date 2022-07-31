@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
-import { authMiddleware, cors, yupMeIndexBody } from "lib/middlewares";
+import { authMiddleware, cors, yupMiddleware } from "lib/middlewares";
 import { User } from "models/user";
 import * as yup from "yup";
 import { upgradeUser } from "controllers/user";
@@ -45,7 +45,7 @@ async function patchHandler(req: NextApiRequest, res: NextApiResponse, token) {
   }
 }
 export default methods({
-  options: yupMeIndexBody(bodySchema, authMiddleware(patchHandler)),
+  options: yupMiddleware(bodySchema, authMiddleware(patchHandler)),
   get: authMiddleware(getHandler),
-  patch: yupMeIndexBody(bodySchema, authMiddleware(patchHandler)),
+  patch: yupMiddleware(bodySchema, authMiddleware(patchHandler)),
 });

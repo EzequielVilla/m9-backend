@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import * as yup from "yup";
 import methods from "micro-method-router";
-import { yupSearchIndexQuery } from "lib/middlewares";
+import { yupMiddleware } from "lib/middlewares";
 import { getOffsetAndLimitFromReq } from "lib/requests";
 import { findResults } from "controllers/searchs";
 
@@ -31,4 +31,4 @@ const handler = methods({
   get: getHandler,
 });
 
-export default yupSearchIndexQuery(querySchema, handler);
+export default yupMiddleware(querySchema, handler);

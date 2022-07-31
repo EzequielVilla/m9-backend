@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import methods from "micro-method-router";
 import * as yup from "yup";
-import { authMiddleware, yupOrderQuery } from "lib/middlewares";
+import { authMiddleware, yupMiddleware } from "lib/middlewares";
 import { getRedirectAndIdAndCreateOrder } from "controllers/orders";
 
 const querySchema = yup.object().shape({
@@ -32,4 +32,4 @@ const handler = methods({
   post,
 });
 
-export default yupOrderQuery(querySchema, handler);
+export default yupMiddleware(querySchema, handler);
